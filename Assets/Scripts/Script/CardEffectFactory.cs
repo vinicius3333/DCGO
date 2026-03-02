@@ -755,4 +755,36 @@ public partial class CardEffectFactory
     }
 
     #endregion
+
+    #region Jogress Condition Class
+    public static AddJogressConditionClass GetJogressConditionClass(Func<Permanent, bool> permanentCondition1, string description1, Func<Permanent, bool> permanentCondition2, string description2, CardSource card, int cost = 0, Func<Hashtable, bool> canUseCondition = null)
+    {
+        AddJogressConditionClass addJogressConditionClass = new AddJogressConditionClass();
+        addJogressConditionClass.SetUpICardEffect($"DNA Digivolution", CanUseCondition, card);
+        addJogressConditionClass.SetUpAddJogressConditionClass(getJogressCondition: GetJogress);
+        addJogressConditionClass.SetNotShowUI(true);
+        return addJogressConditionClass;
+
+        bool CanUseCondition(Hashtable hashtable)
+        {
+            return canUseCondition == null || canUseCondition(hashtable);
+        }
+
+        JogressCondition GetJogress(CardSource cardSource)
+        {
+            if (cardSource == card)
+            {
+                return CardEffectCommons.GetJogressConditions(
+                    permanentCondition1, 
+                    description1, 
+                    permanentCondition2, 
+                    description2, 
+                    card
+                    );
+            }
+
+            return null;
+        }
+    }
+    #endregion
 }
